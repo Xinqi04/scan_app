@@ -1,62 +1,69 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Stok Barcode</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aplikasi Stok Barcode</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* Tambahkan ini kalau class 'hidden' belum ada */
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1>Manajemen Stok Barcode</h1>
+    </header>
 
-    <div class="container">
-        <header>
-            <h1>Manajemen Stok Barcode</h1>
-        </header>
+    <main id="main-page">
+      <button id="show-add-form-btn" class="btn btn-primary">Tambah Item Baru</button>
+      <div id="barcode-list-container">
+        <h2>Daftar Item</h2>
+        <ul id="barcode-list"></ul>
+        <p id="loading-indicator">Memuat data...</p>
+      </div>
+    </main>
 
-        <main id="main-page">
-            <button id="show-add-form-btn" class="btn btn-primary">Tambah Item Baru</button>
-            <div id="barcode-list-container">
-                <h2>Daftar Item</h2>
-                <ul id="barcode-list">
-                    </ul>
-                 <p id="loading-indicator">Memuat data...</p>
-            </div>
-        </main>
-
-        <div id="form-page" class="hidden">
-            <h2 id="form-title">Tambah Item Baru</h2>
-            <form id="barcode-form">
-                <input type="hidden" id="edit-code">
-                <div class="form-group">
-                    <label for="name">Nama Item</label>
-                    <input type="text" id="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="code">Kode Barcode</label>
-                    <div class="input-with-button">
-                        <input type="text" id="code" required>
-                        <button type="button" id="scan-btn" class="btn btn-secondary">Scan</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="price">Harga</label>
-                    <input type="number" id="price" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <button type="button" id="cancel-btn" class="btn">Batal</button>
-                </div>
-            </form>
+    <div id="form-page" class="hidden">
+      <h2 id="form-title">Tambah Item Baru</h2>
+      <form id="barcode-form">
+        <input type="hidden" id="edit-code" />
+        <div class="form-group">
+          <label for="name">Nama Item</label>
+          <input type="text" id="name" required />
         </div>
-
-        <div id="scanner-page" class="hidden">
-            <h2>Arahkan Kamera ke Barcode</h2>
-            <div id="reader"></div>
-            <button id="close-scanner-btn" class="btn">Tutup Scanner</button>
+        <div class="form-group">
+          <label for="code">Kode Barcode</label>
+          <div class="input-with-button">
+            <input type="text" id="code" required />
+            <button type="button" id="scan-btn" class="btn btn-secondary">Scan</button>
+          </div>
         </div>
+        <div class="form-group">
+          <label for="price">Harga</label>
+          <input type="number" id="price" required />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="button" id="cancel-btn" class="btn">Batal</button>
+        </div>
+      </form>
     </div>
 
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src="script.js"></script>
+    <div id="scanner-page" class="hidden">
+      <h2>Arahkan Kamera ke Barcode</h2>
+      <div id="reader" style="width: 100%; max-width: 400px; margin: auto;"></div>
+      <button id="close-scanner-btn" class="btn">Tutup Scanner</button>
+    </div>
+  </div>
+
+  <!-- Barcode scanner library -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+  <!-- Script utama -->
+  <script src="script.js"></script>
 </body>
 </html>

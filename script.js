@@ -24,9 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let html5QrCode;
 
     const showPage = (pageToShow) => {
-        mainPage.classList.add('hidden');
-        formPage.classList.add('hidden');
-        scannerPage.classList.add('hidden');
+        [mainPage, formPage, scannerPage].forEach(p => p.classList.add('hidden'));
         pageToShow.classList.remove('hidden');
     };
 
@@ -35,17 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         barcodeList.innerHTML = '';
         try {
             const response = await fetch(API_URL);
-            const contentType = response.headers.get("content-type");
-
             if (!response.ok) throw new Error('Gagal mengambil data');
-
-            if (contentType && contentType.includes("application/json")) {
-                const barcodes = await response.json();
-                renderBarcodes(barcodes);
-            } else {
-                const text = await response.text();
-                throw new Error(`Respon bukan JSON:\n${text}`);
-            }
+            const data = await response.json();
+            renderBarcodes(data);
         } catch (error) {
             barcodeList.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
         } finally {
@@ -86,25 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const editCode = editCodeInput.value;
 
         try {
-            let response;
-            if (editCode) {
-                response = await fetch(`${API_URL}/${editCode}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(barcodeData)
-                });
-            } else {
-                response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(barcodeData)
-                });
-            }
+            const response = await fetch(editCode ? `${API_URL}/${editCode}` : API_URL, {
+                method: editCode ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(barcodeData)
+            });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Gagal menyimpan data:\n${errorText}`);
-            }
+            if (!response.ok) throw new Error('Gagal menyimpan data');
 
             form.reset();
             editCodeInput.value = '';
@@ -122,18 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target.classList.contains('edit-btn')) {
             try {
                 const response = await fetch(`${API_URL}/${code}`);
-                const contentType = response.headers.get("content-type");
                 if (!response.ok) throw new Error('Item tidak ditemukan');
-
-                const barcode = contentType.includes("application/json") 
-                    ? await response.json()
-                    : { name: '', code: '', price: 0 };
-
-                formTitle.textContent = 'Edit Item';
+                const barcode = await response.json();
                 nameInput.value = barcode.name;
                 codeInput.value = barcode.code;
                 priceInput.value = barcode.price;
                 editCodeInput.value = barcode.code;
+                formTitle.textContent = 'Edit Item';
                 showPage(formPage);
             } catch (error) {
                 alert(`Error: ${error.message}`);
@@ -141,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (target.classList.contains('delete-btn')) {
-            if (confirm(`Apakah Anda yakin ingin menghapus item dengan kode ${code}?`)) {
+            if (confirm(`Yakin hapus item dengan kode ${code}?`)) {
                 try {
                     const response = await fetch(`${API_URL}/${code}`, { method: 'DELETE' });
                     if (!response.ok) throw new Error('Gagal menghapus item');
@@ -153,8 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const onScanSuccess = (decodedText, decodedResult) => {
-        console.log(`Scan result: ${decodedText}`, decodedResult);
+    const onScanSuccess = (decodedText) => {
         codeInput.value = decodedText;
         stopScanner();
         showPage(formPage);
@@ -163,20 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const startScanner = () => {
         showPage(scannerPage);
-        html5QrCode = new Html5QrCode("reader");
+        html5QrCode = new Html5Qrcode("reader");
         html5QrCode.start(
             { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
+            { fps: 10, qrbox: { width: 250, height: 250 } },
             onScanSuccess,
-            (errorMessage) => {
-                // Do nothing, keep scanning
-            })
-        .catch((err) => {
-            alert("Gagal memulai kamera. Pastikan Anda memberikan izin.");
-            console.error("Gagal memulai kamera", err);
+            () => {} // error callback
+        ).catch(err => {
+            alert("Tidak bisa akses kamera. Cek izin atau gunakan HTTPS.");
+            console.error(err);
             showPage(formPage);
         });
     };
@@ -184,10 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const stopScanner = () => {
         if (html5QrCode && html5QrCode.isScanning) {
             html5QrCode.stop().then(() => {
-                console.log("Scanner dihentikan.");
-            }).catch(err => {
-                console.error("Gagal menghentikan scanner.", err);
-            });
+                console.log("Scanner stopped.");
+            }).catch(console.error);
         }
     };
 
@@ -210,6 +175,5 @@ document.addEventListener('DOMContentLoaded', () => {
         showPage(formPage);
     });
 
-    // Load data on first load
     fetchBarcodes();
 });
