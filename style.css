@@ -1,0 +1,182 @@
+/* General Styling & Mobile First */
+:root {
+    --primary-color: #007bff;
+    --danger-color: #dc3545;
+    --background-color: #f4f4f9;
+    --container-bg: #ffffff;
+    --text-color: #333;
+    --border-color: #ddd;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--container-bg);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+/* Utilitas */
+.hidden {
+    display: none !important;
+}
+
+/* Tombol */
+.btn {
+    display: inline-block;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background: var(--border-color);
+    color: var(--text-color);
+    cursor: pointer;
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+#show-add-form-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* Daftar Barcode */
+#barcode-list-container {
+    margin-top: 20px;
+}
+
+#barcode-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.barcode-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.barcode-item:last-child {
+    border-bottom: none;
+}
+
+.item-info p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.item-info p strong {
+    font-size: 1.1rem;
+}
+
+.item-actions .btn {
+    margin-left: 8px;
+    padding: 5px 10px;
+}
+
+/* Form Styling */
+#form-page h2, #scanner-page h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.input-with-button {
+    display: flex;
+}
+
+.input-with-button input {
+    flex-grow: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-with-button button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+.form-actions .btn:first-child {
+    margin-right: 10px;
+}
+
+/* Scanner Styling */
+#reader {
+    width: 100%;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#close-scanner-btn {
+    width: 100%;
+}

@@ -1,34 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Scan Barcode</title>
-  <script src="https://unpkg.com/html5-qrcode"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Stok Barcode</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Scan Barcode</h2>
-  <div id="reader" style="width:300px"></div>
-  <div id="result"></div>
 
-  <script>
-    const apiUrl = "https://rizaaf-scan-barcode.hf.space";
+    <div class="container">
+        <header>
+            <h1>Manajemen Stok Barcode</h1>
+        </header>
 
+        <main id="main-page">
+            <button id="show-add-form-btn" class="btn btn-primary">Tambah Item Baru</button>
+            <div id="barcode-list-container">
+                <h2>Daftar Item</h2>
+                <ul id="barcode-list">
+                    </ul>
+                 <p id="loading-indicator">Memuat data...</p>
+            </div>
+        </main>
 
-    function onScanSuccess(decodedText) {
-      fetch(`${apiUrl}/barcodes/${decodedText}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById('result').innerHTML = `
-            <p><strong>Nama:</strong> ${data.name}</p>
-            <p><strong>Harga:</strong> ${data.price}</p>`;
-        }).catch(() => {
-          document.getElementById('result').innerText = "Barcode tidak ditemukan";
-        });
+        <div id="form-page" class="hidden">
+            <h2 id="form-title">Tambah Item Baru</h2>
+            <form id="barcode-form">
+                <input type="hidden" id="edit-code">
+                <div class="form-group">
+                    <label for="name">Nama Item</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="code">Kode Barcode</label>
+                    <div class="input-with-button">
+                        <input type="text" id="code" required>
+                        <button type="button" id="scan-btn" class="btn btn-secondary">Scan</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="price">Harga</label>
+                    <input type="number" id="price" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="cancel-btn" class="btn">Batal</button>
+                </div>
+            </form>
+        </div>
 
-      html5QrcodeScanner.clear();
-    }
+        <div id="scanner-page" class="hidden">
+            <h2>Arahkan Kamera ke Barcode</h2>
+            <div id="reader"></div>
+            <button id="close-scanner-btn" class="btn">Tutup Scanner</button>
+        </div>
+    </div>
 
-    const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-    html5QrcodeScanner.render(onScanSuccess);
-  </script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="script.js"></script>
 </body>
 </html>
