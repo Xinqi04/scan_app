@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head><title>Hapus Barcode</title></head>
+<body>
+  <h2>Hapus Barcode</h2>
+  <form id="deleteForm">
+    <input type="text" id="code" placeholder="Kode Barcode" required>
+    <button type="submit">Hapus</button>
+  </form>
+
+  <script>
+    const apiUrl = "https://rizaaf-scan-barcode.hf.space";
+
+
+    document.getElementById('deleteForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('code').value;
+
+      await fetch(`${apiUrl}/barcodes/${code}`, {
+        method: "DELETE"
+      });
+
+      alert("Data berhasil dihapus");
+    };
+  </script>
+</body>
+</html>

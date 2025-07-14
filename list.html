@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>List Barcode</title></head>
+<body>
+  <h2>Semua Barcode</h2>
+  <ul id="list"></ul>
+
+  <script>
+    const apiUrl = "https://rizaaf-scan-barcode.hf.space";
+
+
+    fetch(`${apiUrl}/barcodes`)
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('list');
+        data.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = `Nama: ${item.name}, Kode: ${item.code}, Harga: ${item.price}`;
+          list.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>

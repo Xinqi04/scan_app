@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><title>Update Barcode</title></head>
+<body>
+  <h2>Update Data Barcode</h2>
+  <form id="updateForm">
+    <input type="text" id="code" placeholder="Kode Barcode yang Mau Diubah" required><br>
+    <input type="text" id="name" placeholder="Nama Baru"><br>
+    <input type="number" id="price" placeholder="Harga Baru"><br>
+    <button type="submit">Update</button>
+  </form>
+
+  <script>
+    const apiUrl = "https://rizaaf-scan-barcode.hf.space";
+
+
+    document.getElementById('updateForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const code = document.getElementById('code').value;
+      const data = {
+        name: document.getElementById('name').value,
+        price: parseFloat(document.getElementById('price').value)
+      };
+
+      const res = await fetch(`${apiUrl}/barcodes/${code}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      alert("Berhasil diupdate!");
+    };
+  </script>
+</body>
+</html>
